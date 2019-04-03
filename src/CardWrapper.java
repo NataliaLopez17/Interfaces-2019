@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -8,7 +9,7 @@ public class CardWrapper {
 	/**
 	 * Card Collection Class
 	 */
-	public static class CardDeck {
+	public static class CardDeck implements Cloneable, Iterable<Card>, Collection<Card>, Dealable{
 
 		private Card[] deck;
 		private int cardCount;
@@ -34,6 +35,18 @@ public class CardWrapper {
 		public CardDeck(Card[] deck) {
 			this.deck = deck;
 			cardCount = deck.length;
+		}
+
+
+		@Override
+		public CardDeck clone() {
+
+			if(this.deck == null) {
+				return null;
+			}
+
+			//ArrayList<CardDeck> newDeck = new ArrayList<CardDeck>();
+			return new CardDeck(new Card[this.cardCount]);
 		}
 
 		/**
@@ -73,7 +86,7 @@ public class CardWrapper {
 		public Card[] getDeck() {
 			return deck;
 		}
-		
+
 		/**
 		 * Returns the current Card Count.
 		 * @return
@@ -81,7 +94,7 @@ public class CardWrapper {
 		public int getCardCount() {
 			return cardCount;
 		}
-		
+
 		/**
 		 * Check if the given argument is equal 
 		 * to the instance object.
@@ -101,49 +114,83 @@ public class CardWrapper {
 			return true;
 		}
 
-		/*  vvvvvvv Not in Use vvvvvvvv [Addd a front slash at the end * 
+
 
 		@Override
+		public Iterator<Card> iterator() {
+			return new DeckIterator(this);
+		}
+
+
 		public boolean remove(Object arg0) {
 			return false;
 		}
 
-		@Override
 		public boolean removeAll(Collection<?> arg0) {
 			return false;
 		}
 
-		@Override
 		public boolean retainAll(Collection<?> arg0) {
 			return false;
 		}
 
-		@Override
 		public boolean addAll(Collection<? extends Card> arg0) {
 			return false;
 		}
 
-		@Override
 		public void clear() {
 		}
 
-		@Override
 		public boolean containsAll(Collection<?> arg0) {
 			return false;
 		}
 
-		@Override
 		public Object[] toArray() {
 			return null;
 		}
 
-		@Override
 		public <T> T[] toArray(T[] arg0) {
 			return null;
 		}
 
-		/*  ^^^^^^^ Not in Use ^^^^^^^^ */
-		
+		@Override
+		public int size() {
+			return this.cardCount;
+		}
+
+		@Override
+		public boolean isEmpty() {
+			return this.deck.length == 0;
+		}
+
+		@Override
+		public boolean contains(Object o) {
+			if(!(o instanceof CardDeck)) {
+				return false;
+			}
+			CardDeck o2 = (CardDeck) o;
+
+			for(int i = 0; i < cardCount; i++) {
+				if(this.equals(o2)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		@Override
+		public Card dealCard() {
+			Card[] first = new Card[0];
+			for(int i = 0; i < this.deck.length; i++) {
+				first = null;
+			}
+			return this.deck[0];
+		}
+
+		@Override
+		public void shuffleDeck() {
+		}
+
 	}
 
 	/**
@@ -200,7 +247,7 @@ public class CardWrapper {
 	/**
 	 * Card Class
 	 */
-	public static class Card implements Cloneable {
+	public static class Card implements Cloneable, Comparable<Card> {
 		Suit suit;
 		Rank rank;
 
@@ -222,7 +269,7 @@ public class CardWrapper {
 		public Card clone() {
 			return new Card(suit, rank);
 		}
-		
+
 		public Suit getSuit() { return this.suit; }
 		public Rank getRank() { return this.rank; }
 
@@ -236,5 +283,32 @@ public class CardWrapper {
 			Card c = (Card) arg0;
 			return suit == c.suit && rank == c.rank;
 		}
+
+		@Override
+		public int compareTo(Card o) {
+			if(this.rank != o.getRank()) {
+				if(this.rank.compareTo(o.getRank()) > 1) {
+					return 1;
+				}
+				return -1;
+			}
+			else if(this.rank == o.getRank()) {
+				if(this.suit != o.getSuit()) {
+					if(this.suit.compareTo(o.getSuit()) > 1) {
+						return 1;
+					}
+					return -1;
+				}
+			}
+			return 0;
+		}
+	}
+
+	public interface Dealable {
+
+		public Card dealCard();
+		public void shuffleDeck();
+
+
 	}
 }

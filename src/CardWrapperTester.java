@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 import org.junit.Before;
 import org.junit.Test;
 
+
 /**
  * Assumptions:
  * - These method from CardDeck are correct:
@@ -42,14 +43,14 @@ public class CardWrapperTester {
 	CardWrapper.Card c6;
 	CardWrapper.Card c1clone;
 
+	
 	@Before
 	public void setUp() {
-		c1 = new CardWrapper.Card(
-				CardWrapper.Suit.HEARTS, CardWrapper.Rank.TEN);
-		c2 = new CardWrapper.Card(
-				CardWrapper.Suit.CLUBS, CardWrapper.Rank.A);
-		c3 = new CardWrapper.Card(
-				CardWrapper.Suit.DIAMONDS, CardWrapper.Rank.K);
+		c1 = new CardWrapper.Card(CardWrapper.Suit.HEARTS, CardWrapper.Rank.TEN);
+		c2 = new CardWrapper.Card(CardWrapper.Suit.CLUBS, CardWrapper.Rank.A);
+		c3 = new CardWrapper.Card(CardWrapper.Suit.DIAMONDS, CardWrapper.Rank.K);
+		
+		
 		c4 = new CardWrapper.Card(
 				CardWrapper.Suit.HEARTS, CardWrapper.Rank.EIGHTH);
 		c5 = new CardWrapper.Card(
